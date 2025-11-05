@@ -1,0 +1,72 @@
+### Java ###
+*.class
+*.jar
+*.war
+*.ear
+
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+
+### Spring Boot ###
+HELP.md
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+### Eclipse ###
+.metadata
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+bin/
+
+### VS Code ###
+.vscode/
+
+### NetBeans ###
+nbproject/private/
+nbbuild/
+nbdist/
+
+### Mac OS ###
+.DS_Store
+._*
+
+### Windows ###
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+### Linux ###
+*~
+
+### Sensitive Configuration Files ###
+# Keep application.properties with placeholders
+# Ignore files with real credentials
+application-local.properties
+application-dev.properties
+application-prod.properties
+
+### Application Logs ###
+logs/
+*.log
+
+### Temporary Files ###
+temp/
+tmp/
+*.tmp
+*.bak
+*.swp
