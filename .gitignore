@@ -60,6 +60,9 @@ application-local.properties
 application-dev.properties
 application-prod.properties
 
+src/main/resources/application.properties
+
+
 ### Application Logs ###
 logs/
 *.log
