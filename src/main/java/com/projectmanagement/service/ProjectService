@@ -1,0 +1,95 @@
+package com.projectmanagement.service;
+
+import com.projectmanagement.exception.ResourceNotFoundException;
+import com.projectmanagement.model.Project;
+import com.projectmanagement.model.Project.ProjectStatus;
+import com.projectmanagement.model.Team;
+import com.projectmanagement.repository.ProjectRepository;
+import com.projectmanagement.repository.TeamRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Service
+@Transactional
+public class ProjectService {
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    private TeamRepository teamRepository;
+
+    public Project create(Project project) {
+        if (project.getStatus() == null) {
+            project.setStatus(ProjectStatus.PLANNED);
+        }
+        return projectRepository.save(project);
+    }
+
+    @Transactional(readOnly = true)
+    public Project findById(Long id) {
+        return projectRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Project", "id", id));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Project> findAll() {
+        return projectRepository.findAll();
+    }
+
+    public Project update(Long id, Project projectDetails) {
+        Project project = findById(id);
+
+        project.setName(projectDetails.getName());
+        project.setDescription(projectDetails.getDescription());
+        project.setBudget(projectDetails.getBudget());
+        project.setStartDate(projectDetails.getStartDate());
+        project.setEndDate(projectDetails.getEndDate());
+
+        if (projectDetails.getStatus() != null) {
+            project.setStatus(projectDetails.getStatus());
+        }
+
+        return projectRepository.save(project);
+    }
+
+    public void delete(Long id) {
+        Project project = findById(id);
+        projectRepository.delete(project);
+    }
+
+    // Custom business methods
+    public Project assignToTeam(Long projectId, Long teamId) {
+        Project project = findById(projectId);
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new ResourceNotFoundException("Team", "id", teamId));
+
+        project.setTeam(team);
+        return projectRepository.save(project);
+    }
+
+    public Project updateStatus(Long projectId, ProjectStatus status) {
+        Project project = findById(projectId);
+        project.setStatus(status);
+        return projectRepository.save(project);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Project> findByTeamId(Long teamId) {
+        return projectRepository.findByTeamId(teamId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Project> findByStatus(ProjectStatus status) {
+        return projectRepository.findByStatus(status);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Project> findOverdueProjects() {
+        return projectRepository.findOverdueProjects(LocalDate.now());
+    }
+}
